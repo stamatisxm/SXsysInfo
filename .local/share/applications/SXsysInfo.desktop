@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=SXsysInfo
+Name[el]=SXsysInfo
+GenericName=SXsysInfo
+GenericName[el]=SXsysInfo
+Comment=Simple System Information Utility
+Comment[el]=Απλή Εφαρμογή Πληροφοριών Συστήματος
+Type=Application
+TryExec=SXsysInfo
+Exec=SXsysInfo
+Icon=SXsysInfo
+Categories=System;Utility;

@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+
+#
+#    Copyright (C) 2015-2016  Stamatis X. Mavrogeorgis
+#
+#    Author's Email: stamatis@zirconix.net
+#    Author's Website: http://www.istos.xyz
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+# version 0.0.4 - Fix for Arch (/etc/pacman.d) repositories
+# version 0.0.3 - Fix for CentOS (/etc/yum.repos.d) repositories
+# version 0.0.2 - Fix for openSuSE (/etc/zypp) repositories
+# version 0.0.1 - Initial Concept
+
+PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH
+
+showVersion() {
+  echo $(grep '^# version' $(which 2>/dev/null ${0##*/}) | cut -f3 -d\  | sort -u | tail -1)
+}
+
+[[ $1 == '-V' ]] || [[ $1 == '-v' ]] && showVersion && exit
+
+[[ -x $(which 2>/dev/null gxmessage) ]] && g='g'
+
+MESSAGECMD="${g}xmessage"
+
+[[ ! -x $(which 2>/dev/null zenity) ]] && $MESSAGECMD -title "${0##*/}" "This program requires zenity to run" && exit
+
+[[ $(pgrep -au $USER zenity | grep "\-\-name=${0##*/}") ]] && { zenity 2>/dev/null --error --text "${0##*/} is already running!" & } && exit
+
+MYVERSION=$(grep '^# version' $0 | cut -f3 -d\  | sort -r | head -1)
+
+MYICON="$HOME/.local/share/icons/SXsysInfo.png"
+
+ZFONTFMT='<span font="Mono">'
+ENDZFF='</span>'
+declare -i numOfApps=$(grep '^  && { zenity --window-icon=$MYICON &>/dev/null\\' $(which 2>/dev/null $0) | wc -l)
+
+declare -i counter=0
+
+while true; do {
+
+  declare -i remainder=0
+
+  [[ $((counter%numOfApps)) -eq remainder ]] && ((remainder+=1))\
+  && { zenity --window-icon=$MYICON &>/dev/null\
+    --ok-label="Next >>>"\
+    --cancel-label="Quit"\
+    --name="${0##*/} $MYVERSION" \
+    --icon-name="SXsysinfo-repositories"\
+    --title="Repositories"\
+    --question\
+    --no-wrap\
+    --text="$(echo $ZFONTFMT; { [[ -d /etc/pacman.d ]] && find 2>/dev/null /etc/pacman.d -name 'mirrorlist' -exec grep -s '^Server = ' {} \; | tr -d ' ' | cut -f2 -d'=' || [[ -d /etc/yum.repos.d ]] && find 2>/dev/null /etc/yum.repos.d -name '*.repo' -exec grep -s '^baseurl=' {} \; | cut -f2 -d'=' || [[ -d /etc/zypp ]] && find 2>/dev/null /etc/zypp -name '*.repo' -exec grep -s '^baseurl=' {} \; | cut -f2 -d'=' || [[ -d /etc/apt ]] && find 2>/dev/null /etc/apt -name '*.list' -exec grep -v -s '#' {} \; | grep -v '^$'; };\
+              echo $ENDZFF)"\
+    && ((counter+=1)) || exit; }
+
+  [[ $((counter%numOfApps)) -eq remainder ]] && ((remainder++))\
+  && { zenity --window-icon=$MYICON &>/dev/null\
+    --ok-label="Next >>>"\
+    --cancel-label="Quit"\
+    --name="${0##*/} $MYVERSION" \
+    --icon-name="SXsysinfo-cpu-information"\
+    --title="CPU Information"\
+    --question\
+    --no-wrap\
+    --text="$(echo $ZFONTFMT; lscpu | sed 's/\(\(\w\+\s\)\{12\}\)/\1\n\t\t       /g'; echo $ENDZFF)"\
+    && ((counter++)) || exit; }
+    #--text="$(echo $ZFONTFMT; lscpu | sed 's/\(\(\w\+\s\)\{16\}\)/\1\n\t\t       /g'; echo $ENDZFF)"\
+
+  [[ $((counter%numOfApps)) -eq remainder ]] && ((remainder++))\
+  && { zenity --window-icon=$MYICON &>/dev/null\
+    --ok-label="Next >>>"\
+    --cancel-label="Quit"\
+    --name="${0##*/} $MYVERSION" \
+    --icon-name="SXsysinfo-memory"\
+    --title="Memory"\
+    --question\
+    --no-wrap\
+    --text="$(echo $ZFONTFMT; free; echo $ENDZFF)"\
+    && ((counter++)) || exit; }
+
+  [[ $((counter%numOfApps)) -eq remainder ]] && ((remainder++))\
+  && { zenity --window-icon=$MYICON &>/dev/null\
+    --ok-label="Next >>>"\
+    --cancel-label="Quit"\
+    --name="${0##*/} $MYVERSION" \
+    --icon-name="SXsysinfo-kernel"\
+    --title="Kernel and Release"\
+    --question\
+    --no-wrap\
+    --text="$(echo $ZFONTFMT; uname -a; lsb_release 2>/dev/null -a; echo $ENDZFF)"\
+    && ((counter++)) || exit; }
+
+  [[ $((counter%numOfApps)) -eq remainder ]] && ((remainder++))\
+  && { zenity --window-icon=$MYICON &>/dev/null\
+    --ok-label="Next >>>"\
+    --cancel-label="Quit"\
+    --name="${0##*/} $MYVERSION" \
+    --icon-name="SXsysinfo-filesystem"\
+    --title="Mounted Filesystems"\
+    --question\
+    --no-wrap\
+    --text="$(echo $ZFONTFMT; df -Th | egrep '^/dev/|^File' | awk '{ print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7 }'; echo $ENDZFF)"\
+    && ((counter++)) || exit; }
+
+  [[ $((counter%numOfApps)) -eq remainder ]] && ((remainder++))\
+  && { zenity --window-icon=$MYICON &>/dev/null\
+    --ok-label="Next >>>"\
+    --cancel-label="Quit"\
+    --name="${0##*/} $MYVERSION" \
+    --icon-name="SXsysinfo-devices"\
+    --title="System Devices"\
+    --question\
+    --no-wrap\
+    --text="$(echo $ZFONTFMT; lspci; echo $ENDZFF)"\
+    && ((counter++)) || exit; }
+
+  [[ $((counter%numOfApps)) -eq remainder ]] && ((remainder++))\
+  && { zenity --window-icon=$MYICON &>/dev/null\
+    --ok-label="Next >>>"\
+    --cancel-label="Quit"\
+    --name="${0##*/} $MYVERSION" \
+    --icon-name="SXsysinfo-usb"\
+    --title="USB Devices"\
+    --question\
+    --no-wrap\
+    --text="$(echo $ZFONTFMT; lsusb; echo $ENDZFF)"\
+    && ((counter++)) || exit; }
+
+}; done
