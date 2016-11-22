@@ -4,31 +4,43 @@ A Zenity quick'n'dirty system information utility
 
 <img alt="SXsysInfo Logo" src="http://ideaware.xyz/images/SXsysInfo.png" width="48px" height="48px" />
 
+## Interface
+
+Pressing the `Next>>>` button cycles through 7 screens of system information, namely:
+- **Repositories**
+- **CPU Information**
+- **Memory**
+- **Kernel and Release**
+- **Mounted Filesystems**
+- **System Devices**
+- **USB Devices**
+
+These screenshots capture the typical output of each screen
+
 ### Repositories
 
-<img alt="Repositories Logo" src="http://ideaware.xyz/images/SXsysInfo-repositories.png" width="48px" height="48px" />
+![Repositories Panel](http://ideaware.xyz/images/SXsysInfo/SXsysInfo-SSA01.png "Repositories Panel")
 
 ### CPU Information
 
-<img alt="CPU Information Logo" src="http://ideaware.xyz/images/SXsysInfo-cpu-information.png" width="48px" height="48px" />
+![CPU Information Panel](http://ideaware.xyz/images/SXsysInfo/SXsysInfo-SSA02.png "CPU Information Panel")
 
 ### Memory
 
-<img alt="Memory Logo" src="http://ideaware.xyz/images/SXsysInfo-memory.png" width="48px" height="48px" />
+![Memory Information Panel](http://ideaware.xyz/images/SXsysInfo/SXsysInfo-SSA03.png "Memory Information Panel")
 
 ### Kernel and Release
 
-<img alt="Kernel Logo" src="http://ideaware.xyz/images/SXsysInfo-kernel.png" width="48px" height="48px" />
+![Kernel Information Panel](http://ideaware.xyz/images/SXsysInfo/SXsysInfo-SSA04.png "Kernel Information Panel")
 
 ### Mounted Filesystems
 
-<img alt="Filesystem Logo" src="http://ideaware.xyz/images/SXsysInfo-filesystem.png" width="48px" height="48px" />
+![Filesystem Information Panel](http://ideaware.xyz/images/SXsysInfo/SXsysInfo-SSA05.png "Filesystem Information Panel")
 
 ### System Devices
 
-<img alt="System Devices Logo" src="http://ideaware.xyz/images/SXsysInfo-devices.png" width="48px" height="48px" />
+![System Devices Information Panel](http://ideaware.xyz/images/SXsysInfo/SXsysInfo-SSA06.png "System Devices Information Panel")
 
 ### USB Devices
 
-<img alt="USB Devices Logo" src="http://ideaware.xyz/images/SXsysInfo-usb.png" width="48px" height="48px" />
-
+![USB Devices Information Panel](http://ideaware.xyz/images/SXsysInfo/SXsysInfo-SSA07.png "USB Devices Information Panel")
