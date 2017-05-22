@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-#    Copyright (C) 2015-2016  Stamatis X. Mavrogeorgis
+#    Copyright (C) 2015-2017  Stamatis X. Mavrogeorgis
 #
 #    Author's Email: stamatis@zirconix.net
 #    Author's Website: http://www.istos.xyz
@@ -20,6 +20,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# version 0.0.5 - Fix for Slackware (/etc/slapt-get) repositories
 # version 0.0.4 - Fix for Arch (/etc/pacman.d) repositories
 # version 0.0.3 - Fix for CentOS (/etc/yum.repos.d) repositories
 # version 0.0.2 - Fix for openSuSE (/etc/zypp) repositories
@@ -60,11 +61,20 @@ while true; do {
     --ok-label="Next >>>"\
     --cancel-label="Quit"\
     --name="${0##*/} $MYVERSION" \
-    --icon-name="SXsysinfo-repositories"\
+    --icon-name="SXsysInfo-repositories"\
     --title="Repositories"\
     --question\
     --no-wrap\
-    --text="$(echo $ZFONTFMT; { [[ -d /etc/pacman.d ]] && find 2>/dev/null /etc/pacman.d -name 'mirrorlist' -exec grep -s '^Server = ' {} \; | tr -d ' ' | cut -f2 -d'=' || [[ -d /etc/yum.repos.d ]] && find 2>/dev/null /etc/yum.repos.d -name '*.repo' -exec grep -s '^baseurl=' {} \; | cut -f2 -d'=' || [[ -d /etc/zypp ]] && find 2>/dev/null /etc/zypp -name '*.repo' -exec grep -s '^baseurl=' {} \; | cut -f2 -d'=' || [[ -d /etc/apt ]] && find 2>/dev/null /etc/apt -name '*.list' -exec grep -v -s '#' {} \; | grep -v '^$'; };\
+    --text="$(echo $ZFONTFMT; { [[ -d /etc/pacman.d ]] \
+	          && find 2>/dev/null /etc/pacman.d -name 'mirrorlist' -exec grep -s '^Server = ' {} \; | tr -d ' ' | cut -f2 -d'=' \
+			  || [[ -d /etc/yum.repos.d ]] \
+			  && find 2>/dev/null /etc/yum.repos.d -name '*.repo' -exec grep -s '^baseurl=' {} \; | cut -f2 -d'=' \
+			  || [[ -d /etc/zypp ]] \
+			  && find 2>/dev/null /etc/zypp -name '*.repo' -exec grep -s '^baseurl=' {} \; | cut -f2 -d'=' \
+			  || [[ -d /etc/apt ]] \
+			  && find 2>/dev/null /etc/apt -name '*.list' -exec grep -v -s '#' {} \; | grep -v '^$' \
+			  || [[ -d /etc/slapt-get ]] \
+			  && find 2>/dev/null /etc/slapt-get -name 'slapt-*rc' -exec grep -s '^SOURCE=' {} \; | grep -v '^$'; }; \
               echo $ENDZFF)"\
     && ((counter+=1)) || exit; }
 
@@ -73,7 +83,7 @@ while true; do {
     --ok-label="Next >>>"\
     --cancel-label="Quit"\
     --name="${0##*/} $MYVERSION" \
-    --icon-name="SXsysinfo-cpu-information"\
+    --icon-name="SXsysInfo-cpu-information"\
     --title="CPU Information"\
     --question\
     --no-wrap\
@@ -86,7 +96,7 @@ while true; do {
     --ok-label="Next >>>"\
     --cancel-label="Quit"\
     --name="${0##*/} $MYVERSION" \
-    --icon-name="SXsysinfo-memory"\
+    --icon-name="SXsysInfo-memory"\
     --title="Memory"\
     --question\
     --no-wrap\
@@ -98,7 +108,7 @@ while true; do {
     --ok-label="Next >>>"\
     --cancel-label="Quit"\
     --name="${0##*/} $MYVERSION" \
-    --icon-name="SXsysinfo-kernel"\
+    --icon-name="SXsysInfo-kernel"\
     --title="Kernel and Release"\
     --question\
     --no-wrap\
@@ -110,7 +120,7 @@ while true; do {
     --ok-label="Next >>>"\
     --cancel-label="Quit"\
     --name="${0##*/} $MYVERSION" \
-    --icon-name="SXsysinfo-filesystem"\
+    --icon-name="SXsysInfo-filesystem"\
     --title="Mounted Filesystems"\
     --question\
     --no-wrap\
@@ -122,7 +132,7 @@ while true; do {
     --ok-label="Next >>>"\
     --cancel-label="Quit"\
     --name="${0##*/} $MYVERSION" \
-    --icon-name="SXsysinfo-devices"\
+    --icon-name="SXsysInfo-devices"\
     --title="System Devices"\
     --question\
     --no-wrap\
@@ -134,7 +144,7 @@ while true; do {
     --ok-label="Next >>>"\
     --cancel-label="Quit"\
     --name="${0##*/} $MYVERSION" \
-    --icon-name="SXsysinfo-usb"\
+    --icon-name="SXsysInfo-usb"\
     --title="USB Devices"\
     --question\
     --no-wrap\
